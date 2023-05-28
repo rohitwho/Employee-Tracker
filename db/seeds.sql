@@ -5,7 +5,15 @@ VALUES
 ('Marketing'),
 ('Project Manager');
 
-INSERT INTO role (title, salary, department_id)
+
+INSERT INTO department (name)
+VALUES
+('Accounting'),
+('Human Resources'),
+('Marketing'),
+('Project Manager');
+
+INSERT INTO role (title, salary, departmentId)
 VALUES
 ('Chief Accounting Officer', 10000, 1),
 ('Accounting Manager', 9500, 1),
@@ -24,16 +32,16 @@ VALUES
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
-('John', 'Smith', 12, 1),
+('John', 'Smith', 12, NULL),
 ('Ethan', 'Anderson', 11, 2),
 ('Ava', 'Peterson', 10, 3),
-('Noah', 'Ramirez', 9, 4),
+('Noah', 'Ramirez', 9, NULL),
 ('Olivia', 'Bennett', 8, 5),
 ('Liam', 'Cooper', 7, 6),
 ('Emma', 'Jenkins', 6, 7),
-('Mason', 'Rodriguez', 5, 8),
+('Mason', 'Rodriguez', 5, NULL),
 ('Sophia', 'Morgan', 4, 9),
 ('Lucas', 'Mitchell', 3, 10),
-('Mia', 'Turner', 2, 11),
+('Mia', 'Turner', 2, NULL),
 ('Isabella', 'Reed', 1, 12);
 
