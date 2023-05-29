@@ -102,7 +102,7 @@ const addDepartment = () => {
     inquirer.prompt([{
         name: "department",
         type: "input",
-        message: "Please Type in a new DEpartment NAme"
+        message: "Please Type in a new Department name"
 
     }]).then(res => {
         let userInput = res.department
@@ -158,14 +158,18 @@ const addRole = () => {
 
 
 const addEmployee = () => {
-    db.query("SELECT role_id,manager_id FROM employee", (err, res) => {
-
+    db.query("SELECT employee.*, role.title AS role_name, manager.first_name AS manager_name FROM employee LEFT JOIN role ON employee.role_id = role.role_id LEFT JOIN employee AS manager ON employee.manager_id = manager.employeeid", (err, res) => {
         if (err) throw err;
-
-        const employee = res.map((employee => ({ name: employee.role_id })))
-        const manager  = res.map((manager=>({name:manager.manager_id})))
-        console.log(employee)
-        console.log(manager)
+      
+        const employee = res.map((employee) => ({ name: employee.role_name, value: employee.employeeid }));
+        const manager = res.map((manager) => ({ name: manager.manager_name, value: manager.employeeid }));
+      
+        console.log(employee);
+        console.log(manager);
+      
+       
+     
+      
 
         inquirer.prompt([{
             name: "first_name",
@@ -201,15 +205,65 @@ const addEmployee = () => {
             init()
         })
 
-
-
     })
 
-
-
-
-
 }
+
+
+
+
+// Which Employee do you want to update?
+// Which role do you wanna assign the selected employee?
+
+
+const updateEmployee = () => {
+    db.query("SELECT * FROM employee", (err, res) => {
+      if (err) throw err;
+  
+      const employees = res.map(({ first_name }) => ({ name: first_name }));
+      const employeeLast = res.map(({ last_name }) => ({ name: last_name }));
+      const roles = res.map((role) => ({ name: role.role_id, value: role.role_id }));
+  
+      console.log(employees);
+      console.log(employeeLast);
+  
+      inquirer.prompt([
+        {
+          name: "employee",
+          type: "list",
+          message: "Which employee do you want to update?",
+          choices: employees.map(({ name }) => name).concat(employeeLast.map(({ name }) => name))
+        },
+        {
+          name: "role",
+          type: "list",
+          message: "Which role do you want to assign to the selected employee?",
+          choices: roles
+        }
+      ]).then((res) => {
+        // 
+        const updateEmployee = res.employee;
+        const updateEmployeeLast = res.employeeLast.find(({ name }) => name === res.employee).name;;
+        const updateRole = res.role;
+        
+        console.log("Here is the employeeLast: " + updateEmployeeLast);
+        console.log("Here is the employee: " + updateEmployee);
+        console.log("Here is the role: " + updateRole);
+  
+        db.query(`UPDATE employee SET first_name = "${updateEmployee}", last_name = "${updateEmployeeLast}" WHERE employeeid = ${updateRole};`, (err) => {
+          if (err) throw err;
+          console.log("Employee role has been updated");
+          init();
+        });
+      });
+    });
+  }
+  
+
+const updateManager =()=>{
+    
+}
+
 
 // init()
 
