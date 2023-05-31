@@ -1,9 +1,4 @@
-INSERT INTO department (name)
-VALUES
-('Accounting'),
-('Human Resources'),
-('Marketing'),
-('Project Manager');
+
 
 
 INSERT INTO department (name)
@@ -33,15 +28,15 @@ VALUES
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
 ('John', 'Smith', 12, NULL),
-('Ethan', 'Anderson', 11, 2),
-('Ava', 'Peterson', 10, 3),
+('Ethan', 'Anderson', 11, 1),
+('Ava', 'Peterson', 10, 2),
 ('Noah', 'Ramirez', 9, NULL),
-('Olivia', 'Bennett', 8, 5),
-('Liam', 'Cooper', 7, 6),
-('Emma', 'Jenkins', 6, 7),
+('Olivia', 'Bennett', 8, 4),
+('Liam', 'Cooper', 7, 5),
+('Emma', 'Jenkins', 6, 6),
 ('Mason', 'Rodriguez', 5, NULL),
-('Sophia', 'Morgan', 4, 9),
-('Lucas', 'Mitchell', 3, 10),
+('Sophia', 'Morgan', 4, 8),
+('Lucas', 'Mitchell', 3, 19),
 ('Mia', 'Turner', 2, NULL),
-('Isabella', 'Reed', 1, 12);
+('Isabella', 'Reed', 1, 11);
 
