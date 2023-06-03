@@ -5,9 +5,13 @@
 
 
 ## Description
+AS A business owner
+I WANT to be able to view and manage the departments, roles, and employees in my company
+SO THAT I can organize and plan my business
 
 
-## Deployed Application URL
+## Video Link
+https://drive.google.com/file/d/1bwfXWiuw9c_7NOSvwaVrRcDCu4DD9QYU/view?usp=sharing
 
 
 ## Table of Content
@@ -19,13 +23,12 @@
 * [Testing](#testing)
 * [Questions](#questions)
 
-## Screenshot
-
 
 ## Installation
 Employee Tracker `npm install`
 
 ## Features
+Just By using content management systems (CMS). Client can Read and update their Individual departmernt and add employees,update employees, update their Roles and view and update their managers.
 
 
 ##  Dependencies
