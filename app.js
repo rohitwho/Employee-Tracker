@@ -18,7 +18,7 @@ const init = () => {
             type: "list",
             name: "action",
             message: "What would you like to do?",
-            choices: ["view all departments", "view all roles", "view all employees", "add a department", "add a role", "add an employee", "update an employee role", "Update employee managers"]
+            choices: ["view all departments", "view all roles", "view all employees", "add a department", "add a role", "add an employee", "update an employee role", "End Program"]
 
 
         }
@@ -48,6 +48,9 @@ const init = () => {
             case "Update employee managers":
                 updateManager();
                 break;
+            case "End Program" : 
+              db.end();
+              break;
 
         }
     })
@@ -105,7 +108,7 @@ const addRole = () => {
 
         if (err) throw err;
         const departments = res.map((department) => ({ name: department.name, value: department.departmentid }));
-        console.log(departments)
+        
 
         inquirer.prompt([{
 
@@ -127,12 +130,12 @@ const addRole = () => {
         ]).then(res => {
             if (err) throw err;
             let newRole = res.title
-            console.log(newRole);
+          
 
             let newSalary = res.salary
-            console.log(newSalary);
+        
             let newDept = res.department
-            console.log(newDept);
+        
             db.query("INSERT INTO role (title, salary, departmentId) Values (?,?,?)", [newRole, newSalary, newDept])
             if (err) throw err;
             console.log(`New Role has been Added name: ${newRole}`)
@@ -144,18 +147,16 @@ const addRole = () => {
 
 // adds a new employee into the employee table
 const addEmployee = () => {
-    db.query("SELECT employee.*, role.title AS role_name, manager.first_name AS manager_name FROM employee LEFT JOIN role ON employee.role_id = role.role_id LEFT JOIN employee AS manager ON employee.manager_id = manager.employeeid", (err, res) => {
+    db.query("SELECT employee.*, role.title AS role_name, manager.first_name AS manager_name FROM employee LEFT JOIN role ON employee.role_id = role.roleid LEFT JOIN employee AS manager ON employee.manager_id = manager.employeeid", (err, res) => {
+
         if (err) throw err;
 
-        const employee = res.map((employee) => ({ name: employee.role_name, value: employee.employeeid }));
-        const manager = res.map((manager) => ({ name: manager.manager_name, value: manager.employeeid }));
+        const manager = res.map((manage => ({ name: manage.first_name + " " + manage.last_name, value: manage.employeeid })))
 
-        console.log(employee);
-        console.log(manager);
-
-
-
-
+     
+db.query("SELECT * FROM role",(err,res)=>{
+    
+    const employee = res.map((employee) => ({ name: employee.title, value: employee.roleid }));
 
         inquirer.prompt([{
             name: "first_name",
@@ -185,13 +186,14 @@ const addEmployee = () => {
             let first = res.first_name;
             let last = res.last_name;
             let role = res.role;
-            let nManager = res.manager_id;
+            let nManager = res.manager;
             db.query("INSERT INTO employee (first_name,last_name,role_id,manager_id) VALUES (?,?,?,?)", [first, last, role, nManager])
             if (err) throw err
             init()
-        })
+        });
+    });
 
-    })
+    });
 
 }
 
@@ -203,13 +205,14 @@ const updateEmployee = () => {
         if (err) throw err;
         const employees = res.map((employee => ({ name: employee.first_name + " " + employee.last_name, value: employee.employeeid })))
 
-        console.log(employees);
+       
 
         db.query("SELECT * FROM role", (err, res) => {
 
 
 
-            const roles = res.map((role) => ({ name: role.title, value: role.role_id }));
+            const roles = res.map((role => ({ name: role.title, value: role.roleid })));
+        
 
 
 
@@ -232,12 +235,11 @@ const updateEmployee = () => {
 
                 const updateRole = res.role;
 
-                console.log("Here is the employee: " + updateEmployee);
-                console.log("Here is the role: " + updateRole);
+                
 
                 db.query(`UPDATE employee SET role_id= ? WHERE employeeid = ?;`, [updateRole, updateEmployee], (err) => {
                     if (err) throw err;
-                    console.log("Employee role has been updated");
+                    console.log("------(Employee role has been updated)-----");
                     init();
                 });
             });
@@ -246,49 +248,7 @@ const updateEmployee = () => {
 
 }
 
-// update employees manager
-
-const updateManager = () => {
-    db.query("SELECT * FROM employee", (err, res) => {
-        if (err) throw err
-        const response = res.map((eName => ({ name: eName.first_name + " " + eName.last_name, value: eName.employeeid })))
-        const manager = res.map((manage => ({ name: manage.first_name + " " + manage.last_name, value: manage.manager_id })))
-        console.log(response);
 
 
-
-        inquirer.prompt([{
-            type: "list",
-            name: "emName",
-            message: "which employee manager do you want to update?",
-            choices: response
-        },
-        {
-            type: "list",
-            name: "maName",
-            message: "Choose a new manager for selected employee ",
-            choices: manager
-
-        }
-        ]).then((res) => {
-
-
-            const employeeName = res.response;
-            const managerName = res.manager
-
-            db.query("UPDATE employee SET  manager_id = ? WHERE employeeid =?", [employeeName, managerName], (err) => {
-                if (err) throw err;
-                console.log("query Sucessful!")
-                init()
-
-            })
-
-        })
-
-    })
-
-}
-
-
-// init()
+init();
 

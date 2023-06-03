@@ -25,14 +25,13 @@ CREATE TABLE employee (
   employeeid INT NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
-  role_id INT NOT NULL,
+  role_id INT ,
   manager_id INT,
   PRIMARY KEY (employeeid),
-FOREIGN KEY (role_id) REFERENCES role (roleid),
-  FOREIGN KEY (manager_id) REFERENCES employee (employeeid)
+  FOREIGN KEY (role_id) REFERENCES role (roleid),
+
 
 );
 
 
 
--- SELECT role.roleid, role.title, employee.first_name, employee.last_name, role.salary FROM role INNER JOIN department ON role.departmentId = department.departmentid INNER JOIN employee ON employee.role_id = role.roleid;
